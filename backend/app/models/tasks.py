@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped, relationship
-from sqlalchemy.testing.schema import mapped_column
+from sqlalchemy.orm import mapped_column
 
 from core.database.base import Base
 if TYPE_CHECKING:
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 class Task(Base):
     __tablename__ = "tasks"
 
-    title: Mapped[str] = mapped_column(String)
+    title: Mapped[str] = mapped_column(String(255))
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
     user: Mapped["User"] = relationship(
