@@ -1,9 +1,12 @@
-from fastapi import FastAPI, Request
+import uvicorn
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import pymysql
-import time
 
-app = FastAPI()
+
+from core.config import settings
+from api import router as api_router
+
+app = FastAPI(title="API for local task manager")
 
 app.add_middleware(
     CORSMiddleware,
@@ -12,44 +15,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-def get_db_connection():
-    return pymysql.connect(
-        host='db',
-        user='root',
-        password='password',
-        database='test_db',
-        cursorclass=pymysql.cursors.DictCursor
+app.include_router(api_router)
+
+if __name__ == "__main__":
+    uvicorn.run(
+        "main:app",
+        reload=True,
+        host=settings.run.host,
+        port=settings.run.port,
     )
-
-@app.get("/tasks")
-def get_tasks(search: str = None):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
-    query = "SELECT * FROM tasks"
-    if search:
-        query += f" WHERE title LIKE '%{search}%'"
-    
-    cursor.execute(query)
-    tasks = cursor.fetchall()
-
-    for task in tasks:
-        cursor.execute(f"SELECT name FROM users WHERE id = {task['user_id']}")
-        user = cursor.fetchone()
-        task['user_name'] = user['name'] if user else "Unknown"
-    
-    conn.close()
-    return tasks
-
-@app.post("/tasks")
-async def create_task(request: Request):
-    data = await request.json()
-    title = data.get("title")
-    user_id = data.get("user_id", 1)
-
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute(f"INSERT INTO tasks (title, user_id) VALUES ('{title}', {user_id})")
-    conn.commit()
-    conn.close()
-    return {"status": "created"}
