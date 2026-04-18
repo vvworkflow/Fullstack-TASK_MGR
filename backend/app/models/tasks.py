@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import String, ForeignKey, Enum
+from sqlalchemy import String, ForeignKey, Enum, Text
 from sqlalchemy.orm import Mapped, relationship
 from sqlalchemy.orm import mapped_column
 
@@ -15,8 +15,9 @@ class Task(Base):
     __tablename__ = "tasks"
 
     title: Mapped[str] = mapped_column(String(255))
-    status: Mapped[TaskStatus] = mapped_column(Enum(TaskStatus))
-    priority: Mapped[TaskPriority] = mapped_column(Enum(TaskPriority))
+    description: Mapped[str | None] = mapped_column(Text)
+    status: Mapped[TaskStatus] = mapped_column(Enum(TaskStatus), index=True)
+    priority: Mapped[TaskPriority] = mapped_column(Enum(TaskPriority), index=True)
     created_by_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     assignee_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
 

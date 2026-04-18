@@ -5,12 +5,13 @@ from sqlalchemy.orm import Mapped, relationship
 from sqlalchemy.orm import mapped_column
 
 from core.database.base import Base
+from models.mixins.timestamp import CreatedAtMixin
 
 if TYPE_CHECKING:
     from models.tasks import Task
 
 
-class User(Base):
+class User(CreatedAtMixin, Base):
     __tablename__ = "users"
 
     name: Mapped[str] = mapped_column(String(255))
