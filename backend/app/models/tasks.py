@@ -16,8 +16,17 @@ class Task(Base):
 
     title: Mapped[str] = mapped_column(String(255))
     description: Mapped[str | None] = mapped_column(Text)
-    status: Mapped[TaskStatus] = mapped_column(Enum(TaskStatus), index=True)
-    priority: Mapped[TaskPriority] = mapped_column(Enum(TaskPriority), index=True)
+    status: Mapped[TaskStatus] = mapped_column(
+        Enum(TaskStatus), index=True,
+        default=TaskStatus.backlog,
+        server_default=TaskStatus.backlog.value
+    )
+    priority: Mapped[TaskPriority] = mapped_column(
+        Enum(TaskPriority),
+        index=True,
+        default=TaskPriority.low,
+        server_default=TaskPriority.low.value,
+    )
     created_by_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
     assignee_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
 
