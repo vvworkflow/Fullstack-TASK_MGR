@@ -1,6 +1,8 @@
 __all__ = (
     "User",
     "Task",
+    "TaskStatistic",
 )
-from models.tasks import Task
-from models.users import User
+from .tasks import Task
+from .users import User
+from .task_statistic import TaskStatistic
