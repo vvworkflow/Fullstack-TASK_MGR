@@ -4,7 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.users import User
-from schemas.users import UserCreate
+from schemas.users import UserCreate, UserUpdatePartial
 
 
 async def create_user(user: UserCreate, session: AsyncSession) -> User:
@@ -27,8 +27,23 @@ async def get_user_by_id(id: int, session: AsyncSession) -> User | None:
     return user
 
 
-async def get_user_by_name(name: str, session: AsyncSession) -> Sequence[User]:
-    stmt = select(User).where(User.name.ilike(t"%{name}%"))
+async def get_users_by_name(name: str, session: AsyncSession) -> Sequence[User]:
+    stmt = select(User).where(User.name.ilike(f"%{name}%"))
     result = await session.execute(stmt)
     users = result.scalars().all()
     return users
+
+
+async def update_user_partial(
+    user: User, new_user_data: UserUpdatePartial, session: AsyncSession
+) -> User:
+    for key, value in new_user_data.model_dump(exclude_unset=True).items():
+        setattr(user, key, value)
+    await session.commit()
+    await session.refresh(user)
+    return user
+
+
+async def delete_user(user: User, session: AsyncSession) -> None:
+    await session.delete(user)
+    await session.commit()

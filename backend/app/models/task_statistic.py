@@ -8,10 +8,6 @@ from enums.tasks import TaskStatus
 from models.mixins.timestamp import UpdatedAtMixin
 
 
-def _utcnow() -> datetime:
-    return datetime.now(tz=timezone.utc)
-
-
 class TaskStatistic(UpdatedAtMixin, Base):
     __tablename__ = "task_statistic"
 
