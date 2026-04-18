@@ -18,15 +18,15 @@ class Task(Base):
     description: Mapped[str | None] = mapped_column(Text)
     status: Mapped[TaskStatus] = mapped_column(Enum(TaskStatus), index=True)
     priority: Mapped[TaskPriority] = mapped_column(Enum(TaskPriority), index=True)
-    created_by_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    created_by_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
     assignee_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
 
-    created_by: Mapped["User"] = relationship(
+    created_by: Mapped["User | None"] = relationship(
         back_populates="created_tasks",
         foreign_keys=[created_by_id],
         lazy="raise",
     )
-    assignee: Mapped["User"] = relationship(
+    assignee: Mapped["User | None"] = relationship(
         back_populates="assigned_tasks",
         foreign_keys=[assignee_id],
         lazy="raise",
