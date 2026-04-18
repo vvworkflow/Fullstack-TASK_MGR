@@ -1,8 +1,8 @@
 __all__ = (
     "User",
     "Task",
-    "TaskStatistic",
+    "TaskChangelog",
 )
 from .tasks import Task
 from .users import User
-from .task_statistic import TaskStatistic
+from .tasks_changelogs import TaskChangelog
