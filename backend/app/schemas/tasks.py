@@ -1,9 +1,15 @@
 from pydantic import BaseModel
 
+from enums.tasks import TaskStatus, TaskPriority
+
 
 class TaskBase(BaseModel):
     title: str
-    user_id: int
+    description: str | None = None
+    status: TaskStatus
+    priority: TaskPriority
+    created_by_id: int
+    assignee_id: int | None = None
 
 
 class TaskCreate(TaskBase):
@@ -16,4 +22,8 @@ class TaskRead(TaskBase):
 
 class TaskUpdatePartial(TaskBase):
     title: str | None = None
-    user_id: int | None = None
+    description: str | None = None
+    status: TaskStatus | None = None
+    priority: TaskPriority | None = None
+    created_by_id: int | None = None
+    assignee_id: int | None = None
