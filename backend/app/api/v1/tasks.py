@@ -5,12 +5,14 @@ from starlette import status
 
 from core.database.db_helper import db_helper
 from crud import tasks as tasks_crud
-from schemas.tasks import TaskCreate, TaskUpdatePartial
+from enums.tasks import TaskStatus, TaskPriority
+from schemas.tasks import TaskCreate, TaskUpdatePartial, TaskRead
+from services import tasks as tasks_service
 
 router = APIRouter(tags=["Tasks"], prefix="/tasks")
 
 
-@router.post("")
+@router.post("", status_code=status.HTTP_201_CREATED, response_model=TaskRead)
 async def create_task(
     task: TaskCreate,
     session: AsyncSession = Depends(db_helper.session_getter),
@@ -28,10 +30,11 @@ async def get_tasks(
     return await tasks_crud.get_tasks(session=session)
 
 
-@router.patch("/{id}")
+@router.patch("/{id}", response_model=TaskRead)
 async def update_task(
     id: int,
     new_task_data: TaskUpdatePartial,
+    changed_by: int,  # пока так, но вообще должно быть get_current_user через Depends() когда будет реализована аутентификация
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     task = await tasks_crud.get_task_by_id(id=id, session=session)
@@ -42,7 +45,7 @@ async def update_task(
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
 
 
-@router.delete("/{id}")
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_task(
     id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
