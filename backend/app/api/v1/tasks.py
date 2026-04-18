@@ -14,20 +14,25 @@ router = APIRouter(tags=["Tasks"], prefix="/tasks")
 
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=TaskRead)
 async def create_task(
-    task: TaskCreate,
+    task_data: TaskCreate,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    return await tasks_crud.create_task(task=task, session=session)
+    return await tasks_crud.create_task(task_data=task_data, session=session)
 
 
 @router.get("")
 async def get_tasks(
     title: str | None = None,
+    status: TaskStatus | None = None,
+    priority: TaskPriority | None = None,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    if title:
-        return await tasks_crud.get_tasks_by_title(title=title, session=session)
-    return await tasks_crud.get_tasks(session=session)
+    return await tasks_crud.get_tasks(
+        title=title,
+        status=status,
+        priority=priority,
+        session=session,
+    )
 
 
 @router.patch("/{id}", response_model=TaskRead)
@@ -38,11 +43,16 @@ async def update_task(
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     task = await tasks_crud.get_task_by_id(id=id, session=session)
-    if task:
-        return await tasks_crud.update_task_partial(
-            task=task, new_task_data=new_task_data, session=session
+    if not task:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Task not found"
         )
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
+    return await tasks_service.update_task(
+        task=task,
+        new_task_data=new_task_data,
+        changed_by=changed_by,
+        session=session,
+    )
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -51,7 +61,8 @@ async def delete_task(
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     task = await tasks_crud.get_task_by_id(id=id, session=session)
-    if task:
-        await tasks_crud.delete_task(task=task, session=session)
-        return {"status": "success"}
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
+    if not task:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Task not found"
+        )
+    await tasks_crud.delete_task(task=task, session=session)
