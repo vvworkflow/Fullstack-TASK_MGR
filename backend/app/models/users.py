@@ -14,8 +14,11 @@ class User(Base):
     __tablename__ = "users"
 
     name: Mapped[str] = mapped_column(String(255))
-
-    tasks: Mapped[list["Task"] | None] = relationship(
-        back_populates="user",
-        lazy="raise"
+    created_tasks: Mapped[list["Task"]] = relationship(
+        foreign_keys="[Task.created_by_id]",
+        back_populates="created_by",
+    )
+    assigned_tasks: Mapped[list["Task"]] = relationship(
+        foreign_keys="[Task.assignee_id]",
+        back_populates="assignee",
     )
