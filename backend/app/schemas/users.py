@@ -4,17 +4,18 @@ from pydantic import BaseModel
 
 
 class UserBase(BaseModel):
-    name: str
-
-
-class UserCreate(UserBase):
     pass
 
 
-class UserRead(UserBase):
+class UserCreate(BaseModel):
+    name: str
+
+
+class UserRead(BaseModel):
     id: int
+    name: str
     created_at: datetime
 
 
-class UserUpdatePartial(UserBase):
+class UserUpdatePartial(BaseModel):
     name: str | None = None

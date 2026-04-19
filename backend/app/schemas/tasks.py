@@ -4,6 +4,10 @@ from enums.tasks import TaskStatus, TaskPriority
 
 
 class TaskBase(BaseModel):
+    pass
+
+
+class TaskCreate(BaseModel):
     title: str
     description: str | None = None
     status: TaskStatus
@@ -12,14 +16,15 @@ class TaskBase(BaseModel):
     assignee_id: int | None = None
 
 
-class TaskCreate(TaskBase):
-    pass
-
-
-class TaskRead(TaskBase):
+class TaskRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
-
     id: int
+    title: str
+    description: str | None = None
+    status: TaskStatus
+    priority: TaskPriority
+    created_by_id: int
+    assignee_id: int | None = None
 
 
 class TaskUpdatePartial(BaseModel):
