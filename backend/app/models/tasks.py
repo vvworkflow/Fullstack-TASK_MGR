@@ -10,6 +10,7 @@ from models.mixins.timestamp import CreatedAtMixin
 
 if TYPE_CHECKING:
     from models.users import User
+    from models import TaskChangelog
 
 
 class Task(CreatedAtMixin, Base):
@@ -40,5 +41,10 @@ class Task(CreatedAtMixin, Base):
     assignee: Mapped["User | None"] = relationship(
         back_populates="assigned_tasks",
         foreign_keys=[assignee_id],
+        lazy="raise",
+    )
+    task_changelogs: Mapped[list["TaskChangelog"]] = relationship(
+        back_populates="tasks",
+#         cascade="all, delete-orphan",
         lazy="raise",
     )
