@@ -1,10 +1,13 @@
+from typing import Sequence
 from fastapi import APIRouter, HTTPException
 from fastapi import Depends
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from core.database.db_helper import db_helper
 from crud import tasks as tasks_crud
+from crud import users as users_crud
 from enums.tasks import TaskStatus, TaskPriority
 from schemas.tasks import TaskCreate, TaskUpdatePartial, TaskRead
 from services import tasks as tasks_service
@@ -20,7 +23,7 @@ async def create_task(
     return await tasks_crud.create_task(task_data=task_data, session=session)
 
 
-@router.get("")
+@router.get("", response_model=Sequence[TaskRead])
 async def get_tasks(
     title: str | None = None,
     status: TaskStatus | None = None,
@@ -39,7 +42,7 @@ async def get_tasks(
 async def update_task(
     id: int,
     new_task_data: TaskUpdatePartial,
-    changed_by: int,  # пока так, но вообще должно быть get_current_user через Depends() когда будет реализована аутентификация
+    changed_by_id: int,  # пока так, но вообще должно быть get_current_user через Depends() когда будет реализована аутентификация
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     task = await tasks_crud.get_task_by_id(id=id, session=session)
@@ -47,12 +50,31 @@ async def update_task(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Task not found"
         )
-    return await tasks_service.update_task(
-        task=task,
-        new_task_data=new_task_data,
-        changed_by=changed_by,
-        session=session,
-    )
+    changed_by = await users_crud.get_user_by_id(id=changed_by_id, session=session)
+    if not changed_by:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Please authorize in system. User with id: {changed_by_id} not found.",
+        )
+    try:
+        return await tasks_service.update_task_with_changelog(
+            task=task,
+            new_task_data=new_task_data,
+            changed_by_id=changed_by_id,
+            session=session,
+        )
+    except IntegrityError as e:
+        print(f"Integrity ERROR: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Referenced entity (assignee, priority, etc.) does not exist.",
+        )
+    except Exception as e:
+        print(e)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error occurred.",
+        )
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
