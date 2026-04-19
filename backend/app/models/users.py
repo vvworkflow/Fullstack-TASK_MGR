@@ -8,6 +8,7 @@ from core.database.base import Base
 from models.mixins.timestamp import CreatedAtMixin
 
 if TYPE_CHECKING:
+    from models import TaskChangelog
     from models.tasks import Task
 
 
@@ -22,4 +23,8 @@ class User(CreatedAtMixin, Base):
     assigned_tasks: Mapped[list["Task"]] = relationship(
         foreign_keys="[Task.assignee_id]",
         back_populates="assignee",
+    )
+    tasks_changelogs: Mapped[list["TaskChangelog"]] = relationship(
+        back_populates="changed_by",
+        lazy="raise",
     )
