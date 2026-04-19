@@ -6,20 +6,22 @@ from sqlalchemy.orm import mapped_column
 
 from core.database.base import Base
 from enums.tasks import TaskStatus, TaskPriority
+from models.mixins.timestamp import CreatedAtMixin
 
 if TYPE_CHECKING:
     from models.users import User
 
 
-class Task(Base):
+class Task(CreatedAtMixin, Base):
     __tablename__ = "tasks"
 
     title: Mapped[str] = mapped_column(String(255))
     description: Mapped[str | None] = mapped_column(Text)
     status: Mapped[TaskStatus] = mapped_column(
-        Enum(TaskStatus), index=True,
+        Enum(TaskStatus),
+        index=True,
         default=TaskStatus.backlog,
-        server_default=TaskStatus.backlog.value
+        server_default=TaskStatus.backlog.value,
     )
     priority: Mapped[TaskPriority] = mapped_column(
         Enum(TaskPriority),
