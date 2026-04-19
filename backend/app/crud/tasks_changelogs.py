@@ -5,7 +5,7 @@ from models.tasks_changelogs import TaskChangelog
 
 async def create_changelog(
     task_id: int,
-    changed_by: int,
+    changed_by_id: int,
     field: str,
     old_value: str,
     new_value: str,
@@ -13,7 +13,7 @@ async def create_changelog(
 ) -> None:
     log = TaskChangelog(
         task_id=task_id,
-        changed_by=changed_by,
+        changed_by_id=changed_by_id,
         field=field,
         old_value=old_value,
         new_value=new_value,

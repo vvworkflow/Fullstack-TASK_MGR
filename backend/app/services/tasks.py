@@ -8,10 +8,10 @@ from crud import tasks as tasks_crud
 TRACKED_FIELDS = {"status", "priority"}
 
 
-async def update_task(
+async def update_task_with_changelog(
     task: Task,
     new_task_data: TaskUpdatePartial,
-    changed_by: int,
+    changed_by_id: int,
     session: AsyncSession,
 ) -> Task:
     for key, new_value in new_task_data.model_dump(exclude_unset=True).items():
@@ -20,7 +20,7 @@ async def update_task(
             if old_value != new_value:
                 await task_status_changelogs_crud.create_changelog(
                     task_id=task.id,
-                    changed_by=changed_by,
+                    changed_by_id=changed_by_id,
                     field=key,
                     old_value=old_value.value if old_value else None,
                     new_value=new_value.value if new_value else None,
