@@ -11,8 +11,7 @@ app = FastAPI(title="API for local task manager")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://localhost:3000",
-        "http://localhost:5173",
+        "http://localhost:3000",
     ],
     allow_credentials=True,
     allow_methods=["*"],
