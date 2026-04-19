@@ -30,33 +30,3 @@
     *   📅 **Task List:** Список задач с актуальными фильтрами.
     *   📊 **Stats Dashboard:** Панель статистики и аналитики задач.
 
----
-
-## 📂 Project Structure (Updated)
-### Структура проекта
-
-```text
-.
-├── backend
-│   └── app
-│       ├── alembic
-│       │   └── versions # Миграции базы данных
-│       ├── api
-│       │   └── v1 # Эндпоинты API (с внедрением сессий через Depends)
-│       ├── core
-│       │   └── database # Подключение к БД и db_helper (SQLAlchemy + aiomysql)
-│       ├── crud
-│       ├── enums
-│       ├── models
-│       │   └── mixins
-│       ├── schemas
-│       └── services # Бизнес-логика и сервис отслеживания changelog
-│   
-│   
-└── frontend # Клиентская часть (React + Vite + Tailwind)
-    └── src
-        ├── api
-        ├── components
-        └── pages
-```
-
