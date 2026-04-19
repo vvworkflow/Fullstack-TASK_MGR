@@ -34,20 +34,23 @@ async def update_user(
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     user = await users_crud.get_user_by_id(id=id, session=session)
-    if user:
-        return await users_crud.update_user_partial(
-            user=user, new_user_data=new_user_data, session=session
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
         )
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return await users_crud.update_user_partial(
+        user=user, new_user_data=new_user_data, session=session
+    )
 
 
-@router.delete("/{id}")
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_user(
     id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
     user = await users_crud.get_user_by_id(id=id, session=session)
-    if user:
-        await users_crud.delete_user(user=user, session=session)
-        return {"status": "success"}
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+    await users_crud.delete_user(user=user, session=session)
