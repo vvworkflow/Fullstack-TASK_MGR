@@ -23,7 +23,7 @@ class TaskRead(BaseModel):
     description: str | None = None
     status: TaskStatus
     priority: TaskPriority
-    created_by_id: int
+    created_by_id: int | None = None
     assignee_id: int | None = None
 
 
