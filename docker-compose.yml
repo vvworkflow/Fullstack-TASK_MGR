@@ -16,15 +16,14 @@ services:
       retries: 3
     volumes:
       - db:/var/lib/mysql
-      - ./init_mock_data.sql:/docker-entrypoint-initdb.d/init_mock_data.sql
 
   backend:
-    image: python:3.10-slim
     container_name: test_backend
-    working_dir: /app
-    volumes:
-      - ./backend/app:/app
-    command: bash -c "pip install -r requirements.txt && python app.py"
+    build:
+      dockerfile: Dockerfile
+      context: ./backend
+    env_file:
+      - ./backend/.env
     ports:
       - "8000:8000"
     depends_on:
@@ -32,16 +31,14 @@ services:
         condition: service_healthy
 
   frontend:
-    image: node:18-slim
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     container_name: test_frontend
-    working_dir: /app
-    volumes:
-      - ./frontend:/app
-    command: bash -c "npm install && npm start"
     ports:
       - "3000:3000"
-    environment:
-      - WDS_SOCKET_PORT=0
+    depends_on:
+      - backend
 
 volumes:
   db:
