@@ -34,6 +34,7 @@ class Settings(BaseSettings):
         env_file=(BASE_DIR / ".env", BASE_DIR / ".env.example"),
         env_file_encoding="utf-8",
         env_nested_delimiter="__",
+        extra="ignore",
     )
     run: RunConfig = RunConfig()
     db: DatabaseConfig
