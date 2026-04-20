@@ -11,11 +11,20 @@
 git clone <YOUR_REPOSITORY_URL>
 cd <YOUR_PROJECT_FOLDER>
 ```
-### 2. Запуск через Docker Compose
+### 2. Создание .env файла
+можете запустить и без .env(c переменными из .env.example) но РЕКОМЕНДУЕТСЯ моздать свой .env файл в директории **./backend/**
+``` bash
+touch backend/".env"
+```
+скопируйте из .env.example параметры и задайте свои желаемые значения.
+```bash
+cp ./backend/.env.example ./backend/.env  
+```
+### 3. Запуск через Docker Compose
 ``` bash
 docker compose up --build
 ```
-### 3. Доступ к приложению
+### 4. Доступ к приложению
 - Frontend: http://localhost:3000
 - Backend: http://localhost:8000
 - Swagger: http://localhost:8000/docs
