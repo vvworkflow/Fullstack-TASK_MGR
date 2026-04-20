@@ -165,6 +165,7 @@ export default function TasksPage() {
                     <TaskCard
                         key={task.id}
                         task={task}
+                        users={users}
                         onEdit={(t) => setModal({ mode: 'edit', task: t })}
                         onDelete={handleDeleteTask}
                     />
