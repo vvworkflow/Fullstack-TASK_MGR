@@ -2,11 +2,16 @@ services:
   db:
     image: mysql:8.0
     container_name: test_mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: test_db
+    env_file:
+      - path: "./backend/.env.example"
+        required: true
+      - path: "./backend/.env"
+        required: false
+#    environment:
+#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+#      MYSQL_USER: ${MYSQL_USER}
+#      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+#      MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports:
       - "3306:3306"
     healthcheck:
@@ -23,7 +28,10 @@ services:
       dockerfile: Dockerfile
       context: ./backend
     env_file:
-      - ./backend/.env
+      - path: "./backend/.env.example"
+        required: true
+      - path: "./backend/.env"
+        required: false
     ports:
       - "8000:8000"
     depends_on:
