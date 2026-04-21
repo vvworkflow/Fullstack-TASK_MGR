@@ -20,7 +20,13 @@ async def create_task(
     task_data: TaskCreate,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    return await tasks_crud.create_task(task_data=task_data, session=session)
+    try:
+        return await tasks_crud.create_task(task_data=task_data, session=session)
+    except IntegrityError:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Please check user id that you tag as 'assignee' of 'created' by",
+        )
 
 
 @router.get("", response_model=Sequence[TaskRead])
