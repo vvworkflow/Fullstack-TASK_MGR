@@ -159,7 +159,7 @@ export default function TaskModal({mode, task, onClose, onSubmit}) {
                         {!isEdit && (
                             <div>
                                 <label
-                                    className="text-gb-muted text-xs uppercase tracking-wider block mb-1">CREATED_BY</label>
+                                    className="text-gb-muted text-xs uppercase tracking-wider block mb-1">CREATED_BY *</label>
                                 <select className="gb-select w-full pr-8" value={form.created_by_id}
                                         onChange={set('created_by_id')}>
                                     <option value="">— select —</option>
