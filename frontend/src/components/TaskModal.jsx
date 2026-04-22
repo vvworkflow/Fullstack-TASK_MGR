@@ -49,6 +49,10 @@ export default function TaskModal({mode, task, onClose, onSubmit}) {
             setError('TITLE IS REQUIRED')
             return
         }
+        if (!isEdit && !form.created_by_id) {
+            setError('CREATED_BY_ID IS REQUIRED')
+            return
+        }
         setSubmitting(true)
         setError(null)
         try {
