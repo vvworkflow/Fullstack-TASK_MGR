@@ -9,6 +9,13 @@ export interface User {
     role: UserRole
 }
 
+export interface UserCreatePayload {
+    username: string
+    fullname: string
+    role: UserRole
+
+}
+
 export interface Task {
     id: number
     title: string
@@ -34,4 +41,17 @@ export interface TaskUpdatePayload {
     status?: TaskStatus
     priority?: TaskPriority
     assignee_id?: number | null
+}
+
+export interface AvgTimeEntry {
+    status: TaskStatus
+    avg_seconds: number
+    task_count?: number
+}
+
+export interface LeaderboardEntry {
+    user_id: number
+    username: string
+    tasks_done: number
+    avg_seconds_to_done: number
 }
