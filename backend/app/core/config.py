@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         case_sensitive=False,
         env_prefix="APP_CONFIG__",
-        env_file=(BASE_DIR / ".env", BASE_DIR / ".env.example"),
+        env_file=(BASE_DIR / ".env.example", BASE_DIR / ".env"),
         env_file_encoding="utf-8",
         env_nested_delimiter="__",
         extra="ignore",

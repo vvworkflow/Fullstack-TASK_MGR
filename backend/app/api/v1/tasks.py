@@ -1,5 +1,5 @@
 from typing import Sequence
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Form
 from fastapi import Depends
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -25,7 +25,7 @@ async def create_task(
     except IntegrityError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Please check user id that you tag as 'assignee' of 'created' by",
+            detail="Please check user id that you tag as 'assignee' or 'created_by'",
         )
 
 
