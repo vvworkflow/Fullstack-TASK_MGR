@@ -2,20 +2,30 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
+from enums.users import UserRole
+
 
 class UserBase(BaseModel):
     pass
 
 
 class UserCreate(BaseModel):
-    name: str
+    username: str
+    fullname: str
+    password: str
+    role: UserRole
 
 
 class UserRead(BaseModel):
     id: int
-    name: str
+    username: str
+    fullname: str
+    role: UserRole
     created_at: datetime
 
 
 class UserUpdatePartial(BaseModel):
-    name: str | None = None
+    username: str | None = None
+    fullname: str | None = None
+    password: str | None = None
+    role: UserRole | None = None
