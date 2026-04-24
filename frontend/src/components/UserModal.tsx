@@ -54,7 +54,7 @@ export default function UserModal({ onClose, onSubmit }: Props) {
                   type="text"
                   className="gb-input"
                   value={form.username}
-                  onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
+                  onChange={(e) => setForm((p) => ({ ...p, username: e.target.value }))}
                   placeholder="username..."
               />
             </div>
@@ -64,7 +64,7 @@ export default function UserModal({ onClose, onSubmit }: Props) {
                   type="text"
                   className="gb-input"
                   value={form.fullname}
-                  onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
+                  onChange={(e) => setForm((p) => ({ ...p, fullname: e.target.value }))}
                   placeholder="full name..."
               />
             </div>
