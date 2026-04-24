@@ -1,14 +1,17 @@
 
 -- ─── USERS ───────────────────────────────────────────────────
-INSERT INTO users (id, name, created_at) VALUES
-  (1, 'Alice Johnson',  NOW() - INTERVAL 30 DAY),
-  (2, 'Bob Smith',      NOW() - INTERVAL 25 DAY),
-  (3, 'Carol White',    NOW() - INTERVAL 20 DAY),
-  (4, 'David Brown',    NOW() - INTERVAL 15 DAY),
-  (5, 'Eve Davis',      NOW() - INTERVAL 10 DAY)
+INSERT INTO users (id, fullname, created_at, username, role, hashed_password) VALUES
+  (1, 'Alice Johnson',  NOW() - INTERVAL 30 DAY, 'user1', 'admin', 'defoltcash'),
+  (2, 'Bob Smith',      NOW() - INTERVAL 25 DAY, 'user2', 'developer', 'defoltcash'),
+  (3, 'Carol White',    NOW() - INTERVAL 20 DAY, 'user3', 'developer', 'defoltcash'),
+  (4, 'David Brown',    NOW() - INTERVAL 15 DAY, 'user4', 'manager', 'defoltcash'),
+  (5, 'Eve Davis',      NOW() - INTERVAL 10 DAY, 'user5', 'manager', 'defoltcash')
 ON DUPLICATE KEY UPDATE
-  name = VALUES(name),
-  created_at = VALUES(created_at);
+  fullname = VALUES(fullname),
+  created_at = VALUES(created_at),
+  username = VALUES(username),
+  role = VALUES(role),
+  hashed_password = VALUES(hashed_password);
 -- ─── TASKS ───────────────────────────────────────────────────
 INSERT INTO tasks (id, title, description, status, priority, created_by_id, assignee_id, created_at) VALUES
   (1,'Setup CI/CD pipeline','Configure GitHub Actions for automated testing and deployment','done','high',1,2, '2026-03-21 09:00:00'),
