@@ -1,6 +1,6 @@
 export type TaskStatus = 'BACKLOG' | 'IN_PROGRESS' | 'REVIEW' | 'DONE' | 'ARCHIVE'
 export type TaskPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
-export type UserRole = 'admin' | 'manager' | 'developer'
+export type UserRole = 'ADMIN' | 'MANAGER' | 'DEVELOPER'
 
 export interface User {
     id: number
