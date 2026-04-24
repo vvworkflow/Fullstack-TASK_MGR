@@ -1,4 +1,4 @@
-export type TaskStatus = 'BACKLOG' | 'IN_PROGRESS' | 'REVIEW' | 'DONE'
+export type TaskStatus = 'BACKLOG' | 'IN_PROGRESS' | 'REVIEW' | 'DONE' | 'ARCHIVE'
 export type TaskPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
 export type UserRole = 'admin' | 'manager' | 'developer'
 
@@ -12,6 +12,7 @@ export interface User {
 export interface UserCreatePayload {
     username: string
     fullname: string
+    password: string
     role: UserRole
 
 }
