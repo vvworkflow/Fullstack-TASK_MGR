@@ -1,4 +1,4 @@
-export function formatSeconds(s) {
+export function formatSeconds(s: number | null | undefined): string {
     if (s == null || isNaN(s)) return '—'
     const secs = Math.round(s)
     if (secs < 60) return `${secs}s`
