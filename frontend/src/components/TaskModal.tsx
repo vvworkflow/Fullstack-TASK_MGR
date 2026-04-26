@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Task, User, TaskStatus, TaskPriority, TaskCreatePayload, TaskUpdatePayload } from '../types'
 
-const STATUSES: TaskStatus[] = ['BACKLOG', 'IN_PROGRESS', 'REVIEW', 'DONE']
+const STATUSES: TaskStatus[] = ['BACKLOG', 'IN_PROGRESS', 'REVIEW', 'DONE', 'ARCHIVE']
 const PRIORITIES: TaskPriority[] = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']
 
 interface FormState {

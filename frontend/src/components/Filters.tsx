@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { TaskStatus, TaskPriority } from '../types'
 
-const STATUSES: Array<TaskStatus | 'ALL'> = ['ALL', 'BACKLOG', 'IN_PROGRESS', 'REVIEW', 'DONE']
+const STATUSES: Array<TaskStatus | 'ALL'> = ['ALL', 'BACKLOG', 'IN_PROGRESS', 'REVIEW', 'DONE', 'ARCHIVE']
 const PRIORITIES: Array<TaskPriority | 'ALL'> = ['ALL', 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL']
 
 interface FilterState {
