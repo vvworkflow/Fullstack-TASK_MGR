@@ -14,7 +14,8 @@ export async function fetchTasks(params: FetchTasksParams = {}): Promise<Task[]>
     if (params.status && params.status !== 'ALL') query.set('status', params.status)
     if (params.priority && params.priority !== 'ALL') query.set('priority', params.priority)
 
-    const url = `${BASE}/tasks${params.toString() ? '?' + params.toString() : ''}`
+    const queryString = query.toString()
+    const url = `${BASE}/tasks${queryString ? '?' + queryString : ''}`
     const res = await fetch(url)
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     return res.json()
