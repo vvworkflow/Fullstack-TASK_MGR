@@ -8,8 +8,8 @@ from models.users import User
 from schemas.users import UserCreate, UserUpdatePartial
 
 
-async def create_user(user: UserCreate, session: AsyncSession) -> User:
-    user = User(**user.model_dump())
+async def create_user(user_data: UserCreate, session: AsyncSession) -> User:
+    user = User(**user_data.model_dump())
     session.add(user)
     await session.commit()
     await session.refresh(user)
@@ -29,7 +29,7 @@ async def get_user_by_id(id: int, session: AsyncSession) -> User | None:
 
 
 async def get_users_by_name(name: str, session: AsyncSession) -> Sequence[User]:
-    stmt = select(User).where(User.name.ilike(f"%{name}%"))
+    stmt = select(User).where(User.username.ilike(f"%{name}%"))
     result = await session.execute(stmt)
     users = result.scalars().all()
     return users
@@ -55,7 +55,7 @@ async def get_top_productive_users(session: AsyncSession) -> list[dict]:
     stmt = (
         select(
             User.id.label("user_id"),
-            User.name.label("username"),
+            User.username.label("username"),
             func.count(TaskChangelog.id).label("tasks_done"),
             func.avg(
                 func.timestampdiff(
@@ -73,7 +73,7 @@ async def get_top_productive_users(session: AsyncSession) -> list[dict]:
                 TaskChangelog.new_value == "done",
             )
         )
-        .group_by(User.id, User.name)
+        .group_by(User.id, User.username)
         .order_by(
             func.avg(
                 func.timestampdiff(

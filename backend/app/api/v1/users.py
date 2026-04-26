@@ -14,7 +14,7 @@ async def create_user(
     user: UserCreate,
     session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    return await users_crud.create_user(user=user, session=session)
+    return await users_crud.create_user(user_data=user, session=session)
 
 
 @router.get("")
