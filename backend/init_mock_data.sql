@@ -1,17 +1,21 @@
 
 -- ─── USERS ───────────────────────────────────────────────────
-INSERT INTO users (id, fullname, created_at, username, role, hashed_password) VALUES
-  (1, 'Alice Johnson',  NOW() - INTERVAL 30 DAY, 'user1', 'admin', 'defoltcash'),
-  (2, 'Bob Smith',      NOW() - INTERVAL 25 DAY, 'user2', 'developer', 'defoltcash'),
-  (3, 'Carol White',    NOW() - INTERVAL 20 DAY, 'user3', 'developer', 'defoltcash'),
-  (4, 'David Brown',    NOW() - INTERVAL 15 DAY, 'user4', 'manager', 'defoltcash'),
-  (5, 'Eve Davis',      NOW() - INTERVAL 10 DAY, 'user5', 'manager', 'defoltcash')
+INSERT INTO users (id, fullname, created_at, username, role, hashed_password, email, is_active, is_verified, is_superuser) VALUES
+  (1, 'Alice Johnson', NOW() - INTERVAL 30 DAY, 'user1', 'admin', 'defoltcash', 'angel@gmail.com', 1, 1, 1),
+  (2, 'Bob Smith',      NOW() - INTERVAL 25 DAY, 'user2', 'developer', 'defoltcash', 'bobby@mail.com', 1, 0, 0),
+  (3, 'Carol White',    NOW() - INTERVAL 20 DAY, 'user3', 'developer', 'defoltcash', 'ayanami@icloud.com', 1, 0, 0),
+  (4, 'David Brown',    NOW() - INTERVAL 15 DAY, 'user4', 'manager', 'defoltcash', 'sindzi@mail.com', 1, 0, 0),
+  (5, 'Eve Davis',      NOW() - INTERVAL 10 DAY, 'user5', 'manager', 'defoltcash', 'eva01@icloud.com', 1, 0, 0)
 ON DUPLICATE KEY UPDATE
   fullname = VALUES(fullname),
   created_at = VALUES(created_at),
   username = VALUES(username),
   role = VALUES(role),
-  hashed_password = VALUES(hashed_password);
+  hashed_password = VALUES(hashed_password),
+  email = VALUES(email),
+  is_active = VALUES(is_active),
+  is_verified = VALUES(is_verified),
+  is_superuser = VALUES(is_superuser);
 -- ─── TASKS ───────────────────────────────────────────────────
 INSERT INTO tasks (id, title, description, status, priority, created_by_id, assignee_id, created_at) VALUES
   (1,'Setup CI/CD pipeline','Configure GitHub Actions for automated testing and deployment','done','high',1,2, '2026-03-21 09:00:00'),
