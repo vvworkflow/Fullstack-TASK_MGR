@@ -1,24 +1,28 @@
 from typing import TYPE_CHECKING
 
+from fastapi_users.db import SQLAlchemyBaseUserTable
+from fastapi_users.db import SQLAlchemyUserDatabase
 from sqlalchemy import String, Enum
+
 from sqlalchemy.orm import Mapped, relationship
 from sqlalchemy.orm import mapped_column
 
 from core.database.base import Base
 from models.mixins.timestamp import CreatedAtMixin
 from enums.users import UserRole
+from custom_types.user_id import UserIDType
 
 if TYPE_CHECKING:
     from models import TaskChangelog
     from models.tasks import Task
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 
-class User(CreatedAtMixin, Base):
+class User(CreatedAtMixin, SQLAlchemyBaseUserTable[UserIDType], Base):
     __tablename__ = "users"
 
     username: Mapped[str] = mapped_column(String(255), unique=True)
     fullname: Mapped[str] = mapped_column(String(255))
-    hashed_password: Mapped[str] = mapped_column(String(255))
     role: Mapped[UserRole] = mapped_column(Enum(UserRole))
 
     created_tasks: Mapped[list["Task"]] = relationship(
@@ -33,3 +37,7 @@ class User(CreatedAtMixin, Base):
         back_populates="changed_by",
         lazy="raise",
     )
+
+    @classmethod
+    def get_db(cls, session: "AsyncSession"):
+        return SQLAlchemyUserDatabase(session, cls)
