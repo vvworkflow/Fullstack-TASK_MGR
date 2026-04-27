@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {TaskStatus, UserCreatePayload} from '../types'
+import {UserCreatePayload} from '../types'
 import {UserRole} from "../types";
 
 const ROLES: UserRole[] = ['ADMIN', 'MANAGER', 'DEVELOPER']
@@ -7,6 +7,14 @@ const ROLES: UserRole[] = ['ADMIN', 'MANAGER', 'DEVELOPER']
 interface Props {
     onClose: () => void
     onSubmit: (payload: UserCreatePayload) => Promise<void>
+}
+
+interface FormState {
+    username: string
+    fullname: string
+    email: string
+    password: string
+    role: UserRole
 }
 
 export default function UserModal({onClose, onSubmit}: Props) {
@@ -38,11 +46,13 @@ export default function UserModal({onClose, onSubmit}: Props) {
             setSubmitting(false)
         }
     }
+
     function set<K extends keyof FormState>(field: K) {
         return (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-            setForm((prev) => ({ ...prev, [field]: e.target.value }))
+            setForm((prev) => ({...prev, [field]: e.target.value}))
         }
     }
+
     const SelectArrow = () => (
         <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gb-muted text-xs">▼</span>
     )
@@ -96,7 +106,7 @@ export default function UserModal({onClose, onSubmit}: Props) {
                             <select className="gb-select w-full pr-8" value={form.role} onChange={set('role')}>
                                 {ROLES.map((p) => <option key={p} value={p}>{p}</option>)}
                             </select>
-                        <SelectArrow />
+                            <SelectArrow/>
                         </div>
                     </div>
 
