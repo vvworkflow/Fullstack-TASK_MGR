@@ -23,7 +23,7 @@ class User(CreatedAtMixin, SQLAlchemyBaseUserTable[UserIDType], Base):
 
     username: Mapped[str] = mapped_column(String(255), unique=True)
     fullname: Mapped[str] = mapped_column(String(255))
-    role: Mapped[UserRole] = mapped_column(Enum(UserRole))
+    role: Mapped[UserRole] = mapped_column(Enum(UserRole), default=UserRole.developer)
 
     created_tasks: Mapped[list["Task"]] = relationship(
         foreign_keys="[Task.created_by_id]",
