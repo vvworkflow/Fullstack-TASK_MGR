@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Task, User, TaskStatus, TaskPriority, TaskCreatePayload, TaskUpdatePayload } from '../types'
 import { fetchTasks, createTask, updateTask, deleteTask } from '../api/tasksApi'
-import { fetchUsers, createUser, deleteUser } from '../api/usersApi'
+import { fetchUsers, deleteUser } from '../api/usersApi'
 import Filters from '../components/Filters'
 import TaskCard from '../components/TaskCard'
 import TaskModal from '../components/TaskModal'
 import UserModal from '../components/UserModal'
+import {registerUser} from "../api/authApi";
 
 interface FilterState {
     title: string
@@ -185,7 +186,7 @@ export default function TasksPage() {
                 <UserModal
                     onClose={() => setModal(null)}
                     onSubmit={async (payload) => {
-                        await createUser(payload)
+                        await registerUser(payload)
                         await loadUsers()
                         setModal(null)
                     }}
