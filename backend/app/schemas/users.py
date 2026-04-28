@@ -7,7 +7,7 @@ from custom_types.user_id import UserIDType
 class UserCreate(schemas.BaseUserCreate):
     username: str
     fullname: str
-    role: UserRole
+    # role: UserRole | None
 
 
 class UserRead(schemas.BaseUser[UserIDType]):
