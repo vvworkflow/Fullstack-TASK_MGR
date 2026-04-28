@@ -5,6 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
+from core.config import settings
 from core.database.db_helper import db_helper
 from crud import tasks as tasks_crud
 from crud import users as users_crud
@@ -12,7 +13,10 @@ from enums.tasks import TaskStatus, TaskPriority
 from schemas.tasks import TaskCreate, TaskUpdatePartial, TaskRead
 from services import tasks as tasks_service
 
-router = APIRouter(tags=["Tasks"], prefix="/tasks")
+router = APIRouter(
+    tags=["Tasks"],
+    prefix=settings.api.v1.tasks,
+)
 
 
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=TaskRead)

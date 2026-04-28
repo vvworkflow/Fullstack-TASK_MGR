@@ -1,11 +1,15 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from core.config import settings
 from core.database.db_helper import db_helper
 from crud import tasks_changelogs as tasks_changelogs_crud
 from crud import users as users_crud
 
-router = APIRouter(tags=["Statistics"], prefix="/statistics")
+router = APIRouter(
+    tags=["Statistics"],
+    prefix=settings.api.v1.statistics,
+)
 
 
 @router.get("/avg-time-per-status")
