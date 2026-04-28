@@ -18,7 +18,7 @@ interface FormState {
 }
 
 export default function UserModal({onClose, onSubmit}: Props) {
-    const [form, setForm] = useState<UserCreatePayload>({fullname: '', role: "DEVELOPER", username: '', password: ''})
+    const [form, setForm] = useState<UserCreatePayload>({fullname: '', role: "DEVELOPER", username: '', password: '', email: ''})
     const [submitting, setSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
@@ -91,6 +91,16 @@ export default function UserModal({onClose, onSubmit}: Props) {
                         />
                     </div>
                     <div>
+                        <label className="text-gb-muted text-xs uppercase tracking-wider block mb-1">EMAIL *</label>
+                        <input
+                            type="text"
+                            className="gb-input"
+                            value={form.email}
+                            onChange={(e) => setForm((p) => ({...p, email: e.target.value}))}
+                            placeholder="youre@email.com"
+                        />
+                    </div>
+                    <div>
                         <label className="text-gb-muted text-xs uppercase tracking-wider block mb-1">PASSWORD *</label>
                         <input
                             type="text"
@@ -100,15 +110,15 @@ export default function UserModal({onClose, onSubmit}: Props) {
                             placeholder="password..."
                         />
                     </div>
-                    <div>
-                        <label className="text-gb-muted text-xs uppercase tracking-wider block mb-1">ROLE *</label>
-                        <div className="relative">
-                            <select className="gb-select w-full pr-8" value={form.role} onChange={set('role')}>
-                                {ROLES.map((p) => <option key={p} value={p}>{p}</option>)}
-                            </select>
-                            <SelectArrow/>
-                        </div>
-                    </div>
+                    {/*<div>*/}
+                    {/*    <label className="text-gb-muted text-xs uppercase tracking-wider block mb-1">ROLE *</label>*/}
+                    {/*    <div className="relative">*/}
+                    {/*        <select className="gb-select w-full pr-8" value={form.role} onChange={set('role')}>*/}
+                    {/*            {ROLES.map((p) => <option key={p} value={p}>{p}</option>)}*/}
+                    {/*        </select>*/}
+                    {/*        <SelectArrow/>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
 
                     {error && <p className="text-red-400 text-xs uppercase tracking-wider">{error}</p>}
                 </div>
